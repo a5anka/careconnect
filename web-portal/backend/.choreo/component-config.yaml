@@ -22,8 +22,8 @@ spec:
       schemaFilePath: openapi.yaml
   outbound:
     serviceReferences:
-    - name: choreo:///choreointegrationteam/appointment-management/dhcezd/8b1c3/v1.0/ORGANIZATION
-      connectionConfig: 01ef0090-ce68-1308-8bc6-b79426027ce8
+    - name: choreo:///choreointegrationteam/appointment-management/dhcezd/8b1c3/v1/ORGANIZATION
+      connectionConfig: 01ef0796-71f2-1c8e-bfaa-2612a245985b
       env:
       - from: ServiceURL
         to: APPOINTMENT_SERVICE_URL
