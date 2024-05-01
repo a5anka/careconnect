@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Container, Typography, Box, CssBaseline, AppBar, Toolbar, IconButton, Snackbar, Divider } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'; // For logout icon
@@ -69,9 +69,9 @@ function App() {
   };
 
 
-  const handleOpenSnackbar = (message) => {
+  const handleOpenSnackbar = useCallback((message) => {
     setSnackbar({ open: true, message });
-  };
+  }, []);
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
