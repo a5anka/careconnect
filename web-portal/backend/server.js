@@ -71,6 +71,29 @@ app.post('/create-appointment', async (req, res) => {
     }
 });
 
+app.get('/appointment-types', async (req, res) => {
+    try {
+        const accessToken = await getAccessToken(); // Obtain the access token
+
+        const appointmentServiceUrl = process.env.APPOINTMENT_SERVICE_URL;
+        if (!appointmentServiceUrl) {
+            throw new Error('Appointment service URL is not defined in the environment variables');
+        }
+
+        const response = await axios.get(`${appointmentServiceUrl}/appointment-types`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+            },
+        });
+
+        // Respond to the client with the appointment types from the appointment service
+        res.status(response.status).send(response.data);
+    } catch (error) {
+        console.error('Error fetching appointment types:', error);
+        res.status(error.response ? error.response.status : 500).send(error.message);
+    }
+});
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
