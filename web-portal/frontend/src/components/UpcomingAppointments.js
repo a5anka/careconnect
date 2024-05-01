@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getUpcomingAppointments } from '../services/appointmentService';
 import { services } from '../serviceData';
-import { List, ListItem, ListItemText, Typography, Paper, Avatar, ListItemAvatar, Box } from '@mui/material';
+import { List, ListItem, ListItemText, Typography, Paper, Avatar, ListItemAvatar } from '@mui/material';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { format } from 'date-fns';
 
@@ -14,18 +14,18 @@ const getServiceLabel = (serviceValue) => {
 const UpcomingAppointments = ({ email, triggerRefresh }) => {
     const [appointments, setAppointments] = useState([]);
 
-    const fetchAppointments = async () => {
-        if (!email) return;
-
-        try {
-            const upcomingAppointments = await getUpcomingAppointments(email);
-            setAppointments(upcomingAppointments);
-        } catch (error) {
-            console.error('Failed to fetch appointments:', error);
-        }
-    };
-
     useEffect(() => {
+        const fetchAppointments = async () => {
+            if (!email) return;
+    
+            try {
+                const upcomingAppointments = await getUpcomingAppointments(email);
+                setAppointments(upcomingAppointments);
+            } catch (error) {
+                console.error('Failed to fetch appointments:', error);
+            }
+        };
+        
         fetchAppointments();
     }, [email, triggerRefresh]);
 
