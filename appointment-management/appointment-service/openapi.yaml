@@ -34,7 +34,35 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Appointment'
+              type: object
+              properties:
+                name:
+                  type: string
+                service:
+                  type: string
+                phoneNumber:
+                  type: string
+                  format: phone
+                email:
+                  type: string
+                  format: email
+                appointmentDate:
+                  type: string
+                  format: date-time
+              required:
+                - name
+                - service
+                - phoneNumber
+                - email
+                - appointmentDate
+            examples:
+              example1:
+                value:
+                  name: "John Doe"
+                  service: "General Consultation"
+                  phoneNumber: "0123456789"
+                  email: "johndoe@example.com"
+                  appointmentDate: "2024-05-01T09:00:00Z"
       responses:
         '201':
           description: The appointment was successfully created
@@ -96,6 +124,23 @@ paths:
       responses:
         '200':
           description: The appointment was successfully deleted
+  /appointment-types:
+    get:
+      summary: List all appointment types
+      responses:
+        '200':
+          description: A list of available appointment types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    value:
+                      type: string
+                    label:
+                      type: string
 components:
   schemas:
     Appointment:

@@ -1,12 +1,11 @@
 // components/BookingForm.js
 
 import React, { useState, useEffect } from 'react';
-import { services } from '../serviceData';
 import { TextField, MenuItem, Button, CircularProgress } from '@mui/material';
 import { LocalizationProvider, DateTimePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { add, startOfDay } from 'date-fns';
-import { bookAppointment } from '../services/appointmentService';
+import { bookAppointment, fetchAppointmentTypes } from '../services/appointmentService';
 
 const BookingForm = ({ userDetails, handleOpenSnackbar, onBookingSuccess }) => {
     const defaultAppointmentDate = add(startOfDay(new Date()), { days: 1, hours: 10 });
@@ -15,6 +14,8 @@ const BookingForm = ({ userDetails, handleOpenSnackbar, onBookingSuccess }) => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [service, setService] = useState('');
     const [appointmentDate, setAppointmentDate] = useState(defaultAppointmentDate);
+    const [services, setServices] = useState([]); // State to store fetched services
+    const [loadingServices, setLoadingServices] = useState(false);
     const [errors, setErrors] = useState({
         name: '',
         phoneNumber: '',
@@ -26,7 +27,20 @@ const BookingForm = ({ userDetails, handleOpenSnackbar, onBookingSuccess }) => {
     // Effect to update state when userDetails changes
     useEffect(() => {
         setName(userDetails.name || userDetails.username);
-    }, [userDetails]);
+        const loadServices = async () => {
+            try {
+                setLoadingServices(true);  // Start loading before the fetch
+                const fetchedServices = await fetchAppointmentTypes();
+                setServices(fetchedServices);
+                setLoadingServices(false); // Stop loading after fetch
+            } catch (error) {
+                console.error('Failed to load appointment types:', error);
+                handleOpenSnackbar('Failed to load services.');
+                setLoadingServices(false); // Ensure loading is stopped even if an error occurs
+            }
+        };
+        loadServices();
+    }, [userDetails, handleOpenSnackbar]);
 
     const validateForm = () => {
         let tempErrors = { name: '', service: '', appointmentDate: '', phoneNumber: '' };
@@ -126,12 +140,17 @@ const BookingForm = ({ userDetails, handleOpenSnackbar, onBookingSuccess }) => {
                 fullWidth
                 margin="normal"
                 variant="outlined"
+                disabled={loadingServices}  // Disable the field while loading
             >
-                {services.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                    </MenuItem>
-                ))}
+                {loadingServices ? (
+                    <MenuItem disabled>Loading...</MenuItem>
+                ) : (
+                    services.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                        </MenuItem>
+                    ))
+                )}
             </TextField>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DateTimePicker

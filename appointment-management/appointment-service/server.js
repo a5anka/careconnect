@@ -33,7 +33,7 @@ app.get('/appointments', async (req, res) => {
 
         // Filter by email address if provided
         if (email) {
-            whereCondition.email = email; 
+            whereCondition.email = email;
         }
 
         const appointments = await Appointment.findAll({
@@ -55,7 +55,7 @@ app.get('/appointments/:id', async (req, res) => {
         const appointment = await Appointment.findOne({ where: { id } });
 
         if (!appointment) {
-            return res.status(404).send({ message: 'Appointment not found'});
+            return res.status(404).send({ message: 'Appointment not found' });
         }
 
         res.status(200).send(appointment);
@@ -85,7 +85,7 @@ app.put('/appointments/:id', async (req, res) => {
         const appointment = Appointment.findOne({ where: { id } });
 
         if (!appointment) {
-            return res.status(404).send({ message: 'Appointment not found'});
+            return res.status(404).send({ message: 'Appointment not found' });
         }
 
         appointment.name = name;
@@ -109,14 +109,24 @@ app.delete('/appointments/:id', async (req, res) => {
         const result = await Appointment.destroy({ where: { id } });
 
         if (result === 0) {
-            return res.status(404).send({ message: 'Appointment not found'});
+            return res.status(404).send({ message: 'Appointment not found' });
         }
 
-        res.status(200).send({ message: 'Appointment deleted successfully'});
+        res.status(200).send({ message: 'Appointment deleted successfully' });
     } catch (error) {
         console.error('Error deleting appointment:', error);
         res.status(500).send(error);
     }
+});
+
+app.get('/appointment-types', (req, res) => {
+    const services = [
+        { value: 'general-consultation', label: 'General Consultation' },
+        { value: 'health-screening', label: 'Health Screenings' },
+        { value: 'flu-shots', label: 'Flu Shots' }
+    ];
+
+    res.status(200).send(services);
 });
 
 app.listen(port, () => {

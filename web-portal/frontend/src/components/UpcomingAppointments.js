@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getUpcomingAppointments } from '../services/appointmentService';
 import { services } from '../serviceData';
-import { List, ListItem, ListItemText, Typography, Paper, Avatar, ListItemAvatar, Box } from '@mui/material';
+import { List, ListItem, ListItemText, Typography, Paper, Avatar, ListItemAvatar, Divider } from '@mui/material';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { format } from 'date-fns';
 
@@ -14,18 +14,18 @@ const getServiceLabel = (serviceValue) => {
 const UpcomingAppointments = ({ email, triggerRefresh }) => {
     const [appointments, setAppointments] = useState([]);
 
-    const fetchAppointments = async () => {
-        if (!email) return;
-
-        try {
-            const upcomingAppointments = await getUpcomingAppointments(email);
-            setAppointments(upcomingAppointments);
-        } catch (error) {
-            console.error('Failed to fetch appointments:', error);
-        }
-    };
-
     useEffect(() => {
+        const fetchAppointments = async () => {
+            if (!email) return;
+
+            try {
+                const upcomingAppointments = await getUpcomingAppointments(email);
+                setAppointments(upcomingAppointments);
+            } catch (error) {
+                console.error('Failed to fetch appointments:', error);
+            }
+        };
+
         fetchAppointments();
     }, [email, triggerRefresh]);
 
@@ -38,23 +38,23 @@ const UpcomingAppointments = ({ email, triggerRefresh }) => {
     }
 
     return (
-        <Paper elevation={3} style={{ marginTop: 20, padding: '20px' }}>
-            <Typography variant="h6" style={{ marginBottom: 10 }}>
-                Upcoming Appointments
-            </Typography>
+        <Paper style={{ margin: 16, maxWidth: 600, width: '100%' }}>
             <List>
                 {appointments.map((appointment, index) => (
-                    <ListItem key={index}>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <CalendarTodayIcon />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary={getServiceLabel(appointment.service)}
-                            secondary={`On ${format(new Date(appointment.appointmentDate), 'MMMM d, yyyy, h:mm a')} for ${appointment.name}`}
-                        />
-                    </ListItem>
+                    <React.Fragment key={index}>
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar>
+                                    <CalendarTodayIcon />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary={getServiceLabel(appointment.service)}
+                                secondary={`On ${format(new Date(appointment.appointmentDate), 'MMMM d, yyyy, h:mm a')} for ${appointment.name}`}
+                            />
+                        </ListItem>
+                        {index < appointments.length - 1 && <Divider />}
+                    </React.Fragment>
                 ))}
             </List>
         </Paper>

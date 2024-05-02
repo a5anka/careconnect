@@ -40,3 +40,13 @@ export const getUpcomingAppointments = async (email) => {
     throw error; // Rethrowing the error so it can be caught and handled in the component
   }
 };
+
+export const fetchAppointmentTypes = async () => {
+  try {
+      const response = await axios.get(`${APPOINTMENT_SERVICE_URL}/appointment-types`);
+      return response.data; // Returns the list of appointment types
+  } catch (error) {
+      console.error('Error fetching appointment types:', error);
+      throw error; // Rethrowing the error for handling in the component
+  }
+};
