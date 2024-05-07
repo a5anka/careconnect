@@ -22,8 +22,8 @@ spec:
       schemaFilePath: openapi.yaml
   outbound:
     serviceReferences:
-    - name: choreo:///codechallenge/appointment-management/cmrqnc/8b1c3/v1.0/ORGANIZATION
-      connectionConfig: 01eef67c-b6e6-17c0-9120-68782ddbb0c9
+    - name: choreo:///ramith/appointment-management/lobein/8b1c3/v1/ORGANIZATION
+      connectionConfig: 01ef0c18-b9ef-1708-a9f6-90a91eb3d5e9
       env:
       - from: ServiceURL
         to: APPOINTMENT_SERVICE_URL
