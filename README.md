@@ -28,4 +28,4 @@ CareConnect utilizes the Backend for Frontend (BFF) pattern to create a seamless
 ![Usecase Diagram](doc/usecase.png)
 
 ### Project Setup Guidance 
-[Set up guidance](/docs/training_guide.pdf)
+[Set up guidance](/doc/training_guide.pdf)
